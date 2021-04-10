@@ -34,3 +34,10 @@ mutation{
   }
 }
 ### delete product
+mutation{
+  deleteProduct(product: {id:"606bae437fccfb61583a12c6"}){
+    id
+    name
+    price
+  }
+}

@@ -92,8 +92,8 @@ const resolvers = {
         await foundProduct.updateOne({
           ...args.product
         })
-        const updatedProd = await Product.find();
-        return updatedProd;
+        const updatedProds = await Product.find();
+        return updatedProds;
       } catch (err) {
         console.log('error', err)
       }
@@ -101,7 +101,10 @@ const resolvers = {
     deleteProduct: async (obj, args, context, info) => {
       try {
         console.log(args)
-        return null
+        const foundProduct = await Product.findById(args.product.id)
+        await foundProduct.deleteOne({id: args.product.id})
+        const updatedProdList = await Product.find();
+        return updatedProdList;
       } catch (err) {
         console.log('error', err)
       }
