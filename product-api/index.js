@@ -1,4 +1,4 @@
-const {ApolloServer, gql} = require('apollo-server')
+const { ApolloServer, gql } = require('apollo-server')
 const { GraphQLScalarType } = require('graphql')
 const { Kind } = require('graphql/language')
 require('dotenv').config();
@@ -44,7 +44,8 @@ const typeDefs = gql`
   }
   type Mutation {
     addProduct(product: ProductInput): [Product]
-    updateProduct(product: ProductInput) : [Product]
+    updateProduct(product: ProductInput): [Product]
+    deleteProduct(product: ProductInput): [Product]
   }
 `;
 
@@ -54,47 +55,54 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     products: async () => {
-      try{
+      try {
         const allProducts = await Product.find();
         return allProducts;
-      } catch(err){
+      } catch (err) {
         console.log('err', err);
-        return[]
+        return []
       }
     },
     product: async (obj, args, context, info) => {
-      try{
+      try {
         const foundProduct = await Product.findById(args.id)
         return foundProduct
-      }catch(err){
+      } catch (err) {
         console.log('err', err);
         return {}
       }
     }
   },
   Mutation: {
-    addProduct: async (obj, {product}, context, info) => {
+    addProduct: async (obj, { product }, context, info) => {
       try {
         await Product.create({
           ...product
         })
         const allProducts = await Product.find();
         return allProducts
-      }catch(err){
+      } catch (err) {
         console.log('error', err);
       }
     },
     updateProduct: async (obj, args, context, info) => {
-      try{
+      try {
         console.log(args)
         const foundProduct = await Product.findById(args.product.id);
-        // return foundProduct
         await foundProduct.updateOne({
           ...args.product
         })
         const updatedProd = await Product.find();
         return updatedProd;
-      } catch(err){
+      } catch (err) {
+        console.log('error', err)
+      }
+    },
+    deleteProduct: async (obj, args, context, info) => {
+      try {
+        console.log(args)
+        return null
+      } catch (err) {
         console.log('error', err)
       }
     }
@@ -107,7 +115,7 @@ const server = new ApolloServer({
   resolvers,
   introspection: true,
   playground: true,
-  context: ({req}) => {
+  context: ({ req }) => {
     const fakeUser = {
       userId: "helloImFakeUser"
     };
@@ -122,6 +130,6 @@ db.once('open', function () {
   console.log('MongoDB connected!')
   server.listen({
     port: process.env.PORT || 4000
-  }).then(({url}) => { console.log(`Server running on ${url}`)})  
+  }).then(({ url }) => { console.log(`Server running on ${url}`) })
 })
 
