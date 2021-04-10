@@ -1,18 +1,18 @@
 import './App.css';
 // import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import ApolloClient from 'apollo-boost'
-import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider, Query } from 'react-apollo'
 import gql from 'graphql-tag'
 
 // LEFT OFF
 // --------
-// #3 Writing Our First GraphQL Query
+// #5
 
 const client = new ApolloClient({
-  uri: 'localhost:4000'
+  uri: 'http://localhost:4000'
 });
 
-const testQuery = gql` 
+const PRODUCT_QUERY = gql` 
   {
     products{
       id
@@ -22,16 +22,30 @@ const testQuery = gql`
   }
 `;
 
-client.query({
-  query: testQuery
-}).then(res => console.log(res))
+// client.query({
+//   query: testQuery
+// }).then(res => console.log(res))
 
 function App() {
 
   return (
     <ApolloProvider client={client} >
       <div className="App">
-        <h2>Yo Bro</h2>
+        <Query query={PRODUCT_QUERY}>
+          {({ loading, data }) => {
+            if (loading) return "Loading...";
+            const { products } = data;
+            return products.map(product => {
+              return (
+                <div key={product.id}>
+                  <h1>{product.name}</h1>
+                  <p>{product.price}</p>
+                  <hr />
+                </div>
+              );
+            })
+          }}
+        </Query>
       </div>
     </ApolloProvider>
   );
