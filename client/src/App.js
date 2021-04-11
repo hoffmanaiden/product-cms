@@ -13,7 +13,7 @@ const client = new ApolloClient({
 });
 
 const PRODUCT_QUERY = gql` 
-  {
+  query allProducts{
     products{
       id
       name
@@ -31,6 +31,7 @@ function App() {
   return (
     <ApolloProvider client={client} >
       <div className="App">
+
         <Query query={PRODUCT_QUERY}>
           {({ loading, data }) => {
             if (loading) return "Loading...";
@@ -46,6 +47,7 @@ function App() {
             })
           }}
         </Query>
+        
       </div>
     </ApolloProvider>
   );
