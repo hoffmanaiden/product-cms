@@ -1,10 +1,13 @@
 # Last did
-Create backend DELETE method
+Switch to @apollo/client
 
 # Todo
 <ul>
   <li>Create frontend Ui for CRUD operations</li>
 </ul>
+
+# Left Off
+Video #7
 
 ### ignored files of note
 product-api > hidden-README.md<br>

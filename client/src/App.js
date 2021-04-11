@@ -1,16 +1,12 @@
 import './App.css';
-// import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
-import ApolloClient from 'apollo-boost'
-import { ApolloProvider, Query } from 'react-apollo'
-import gql from 'graphql-tag'
+import {
+  ApolloClient,
+  InMemoryCache,
+  useQuery,
+  gql
+} from '@apollo/client';
 
-// LEFT OFF
-// --------
-// #5
 
-const client = new ApolloClient({
-  uri: 'http://localhost:4000'
-});
 
 const PRODUCT_QUERY = gql` 
   query allProducts{
@@ -22,35 +18,30 @@ const PRODUCT_QUERY = gql`
   }
 `;
 
-// client.query({
-//   query: testQuery
-// }).then(res => console.log(res))
 
 function App() {
+  const { loading, error, data } = useQuery(PRODUCT_QUERY)
+
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>Error...¯\_(ツ)_/¯</p>
 
   return (
-    <ApolloProvider client={client} >
-      <div className="App">
+    <div className='App'>
 
-        <Query query={PRODUCT_QUERY}>
-          {({ loading, data }) => {
-            if (loading) return "Loading...";
-            const { products } = data;
-            return products.map(product => {
-              return (
-                <div key={product.id}>
-                  <h1>{product.name}</h1>
-                  <p>{product.price}</p>
-                  <hr />
-                </div>
-              );
-            })
-          }}
-        </Query>
-        
-      </div>
-    </ApolloProvider>
-  );
+      {/* GREAT EXPORT MODULE CANADATE */}
+      {data.products.map(product => {
+        return (
+          <div key={product.id}>
+            <h1>{product.name}</h1>
+            <p>{product.price}</p>
+            <hr />
+          </div>
+        );
+      })}
+    </div>
+  )
 }
+
+
 
 export default App;
