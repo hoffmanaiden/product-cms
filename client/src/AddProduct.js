@@ -8,6 +8,7 @@ import {
 } from '@apollo/client';
 
 
+// apollo-client schema?
 const ADD_PRODUCT = gql`
   mutation addProduct($name: String!, $price: Float!) {
     addProduct(product: {
@@ -27,7 +28,6 @@ function AddProduct() {
   const [addProduct, {data}] = useMutation(ADD_PRODUCT);
 
 
-
   function onInput(e) {
     return setInput({
       ...input,
@@ -36,15 +36,14 @@ function AddProduct() {
   }
   function onSubmit(e) {
     e.preventDefault();
-    console.log('name:', input.name)
-    console.log('price:', input.price)
     addProduct({
       variables:{
         name: input.name,
         price: parseFloat(input.price)
       }
-    })
-    setInput({})
+    }).then(() => {
+      setInput({})
+    }).catch(err => console.log(err))
   }
 
   return (

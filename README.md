@@ -1,11 +1,12 @@
 # Last did
 Connected input form to database<br>
-Left off video #12, 14:16<br>
+Left off video #14, update mutation<br>
 Skipped a couple videos for efficiency
 
 # Todo
 <ul>
-  <li>Create frontend Ui for CRUD operations</li>
+  <li>Create frontend UPDATE & DELETE functions</li>
+  <li>Extract ProductList into new module</li>
 </ul>
 
 # Left Off
