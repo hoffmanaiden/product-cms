@@ -5,6 +5,7 @@ import {
   useQuery,
   gql
 } from '@apollo/client';
+import AddProduct from './AddProduct'
 
 
 
@@ -27,7 +28,7 @@ function App() {
 
   return (
     <div className='App'>
-
+      <AddProduct/>
       {/* GREAT EXPORT MODULE CANADATE */}
       {data.products.map(product => {
         return (
