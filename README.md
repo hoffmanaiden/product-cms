@@ -1,5 +1,7 @@
 # Last did
-Switch to @apollo/client
+Connected input form to database<br>
+Left off video #12, 14:16<br>
+Skipped a couple videos for efficiency
 
 # Todo
 <ul>
