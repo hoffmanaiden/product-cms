@@ -8,7 +8,6 @@ import {
 import AddProduct from './AddProduct'
 
 
-
 const PRODUCT_QUERY = gql` 
   query allProducts{
     products{
@@ -42,7 +41,5 @@ function App() {
     </div>
   )
 }
-
-
 
 export default App;
