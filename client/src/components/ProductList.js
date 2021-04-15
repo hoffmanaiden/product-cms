@@ -5,29 +5,24 @@ import {
   useQuery,
   gql
 } from '@apollo/client';
-import AddProduct from './AddProduct'
-
 
 const PRODUCT_QUERY = gql` 
-  query allProducts{
-    products{
-      id
-      name
-      price
-    }
+query allProducts{
+  products{
+    id
+    name
+    price
   }
+}
 `;
 
-
-function App() {
+function ProductList() {
   const { loading, error, data } = useQuery(PRODUCT_QUERY)
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error...¯\_(ツ)_/¯</p>
-
   return (
-    <div className='App'>
-      <AddProduct/>
+    <div>
       {/* GREAT EXPORT MODULE CANADATE */}
       {data.products.map(product => {
         return (
@@ -42,4 +37,4 @@ function App() {
   )
 }
 
-export default App;
+export default ProductList;

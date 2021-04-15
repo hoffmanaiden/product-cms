@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import { ApolloClient, InMemoryCache } from '@apollo/client'
+import App from './components/App';
+import { 
+  ApolloClient, 
+  InMemoryCache,
+  useQuery,
+  gql
+} from '@apollo/client'
 import { ApolloProvider } from '@apollo/client/react';
 
 const client = new ApolloClient({
