@@ -34,9 +34,10 @@ const UPDATE_PRODUCT = gql`
 `
 
 function Product({ product }) {
+  const [state, setState] = useState(product)
   const [currEdit, setCurrEdit] = useState(null);
   const [input, setInput] = useState({})
-  const [updateProduct, {data}] = useMutation(UPDATE_PRODUCT)
+  const [updateProduct, { data }] = useMutation(UPDATE_PRODUCT)
 
   let inEditMode
   if (currEdit === product.id) { inEditMode = true }
@@ -51,15 +52,19 @@ function Product({ product }) {
   }
   const onInput = (e) => {
     return setInput({
-      ...input,
+      ...state,
+      ...input, // ---------------------- drawing from empty state
       [e.target.name]: e.target.value
     })
   }
-  function onSubmit(e){
+  function onSubmit(e) {
     e.preventDefault();
+    console.log(`id: ${product.id}`)
+    console.log(`name: ${input.name}`)
+    console.log(`price: ${input.price}`)
     updateProduct({
       variables: {
-        id: product.id ,
+        id: product.id,
         name: input.name,
         price: parseFloat(input.price)
       }
@@ -70,16 +75,17 @@ function Product({ product }) {
   }
 
   return (
-    <form onSubmit={onSubmit}>
-      {currEdit === product.id ? <input placeholder={product.name} name='name' onChange={onInput} /> : <h1>{product.name}</h1>}
-      {inEditMode ? <input placeholder={product.price} name='price' onChange={onInput} /> : <p>{product.price}</p>}
+    <form action={onSubmit} onSubmit={onSubmit}>
+      {inEditMode ? <h4>{product.name}</h4> : null}
+      {inEditMode ? <input placeholder={product.name} name='name' onChange={onInput} onSubmit={onSubmit}/> : <h1>{product.name}</h1>}
+      {inEditMode ? <input placeholder={product.price} name='price' onChange={onInput} onSubmit={onSubmit} /> : <p>{product.price}</p>}
       {inEditMode ?
         <div>
-          <button onClick={() => toggleEdit(product.id)}><GiCancel/> cancel</button>
-          <button onClick={() => console.log('submit')}>submit</button>
+          <button onClick={() => toggleEdit(product.id)}><GiCancel /> cancel</button>
+          <button type="submit" tabindex="-1">submit</button>
         </div> :
         <button onClick={() => toggleEdit(product.id)}>Edit <GrEdit /></button>
-        
+
       }
       <hr />
     </form>

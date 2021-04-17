@@ -1,12 +1,10 @@
 # Last did
-Connected input form to database<br>
-Left off video #14, update mutation<br>
-Skipped a couple videos for efficiency
+Improved Update frontend
 
 # Todo
 <ul>
-  <li>Create frontend UPDATE & DELETE functions</li>
-  <li>update name makes existing price null, figure out why and fix</li>
+  <li>Create frontend DELETE functions</li>
+  <li>Make Return submit the change</li>
 </ul>
 
 ### ignored files of note

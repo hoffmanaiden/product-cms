@@ -52,6 +52,9 @@ function AddProduct() {
       <input type="text" name="name" placeholder="name" onChange={onInput} value={input.name || ''} />
       <input type="text" name="price" placeholder="price" onChange={onInput} value={input.price || ''} />
       <button>submit</button>
+      <br/>
+      <br/>
+      <hr/>
     </form>
   )
 }
