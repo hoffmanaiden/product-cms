@@ -1,4 +1,4 @@
-
+import './App.css'
 import AddProduct from './AddProduct'
 import ProductList from './ProductList'
 

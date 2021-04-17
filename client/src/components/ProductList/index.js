@@ -1,4 +1,4 @@
-import './App.css';
+import './ProductList.css';
 import {
   ApolloClient,
   InMemoryCache,
@@ -22,7 +22,7 @@ function ProductList() {
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error...¯\_(ツ)_/¯</p>
   return (
-    <div>
+    <div className='ProductList'>
       {/* GREAT EXPORT MODULE CANADATE */}
       {data.products.map(product => {
         return (
