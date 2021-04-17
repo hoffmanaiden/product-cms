@@ -1,10 +1,14 @@
+import React, { useState } from 'react'
 import './ProductList.css';
 import {
   ApolloClient,
   InMemoryCache,
   useQuery,
+  useMutation,
   gql
 } from '@apollo/client';
+import { GrEdit } from 'react-icons/gr';
+import { GiCancel } from 'react-icons/gi';
 
 const PRODUCT_QUERY = gql` 
 query allProducts{
@@ -15,6 +19,72 @@ query allProducts{
   }
 }
 `;
+const UPDATE_PRODUCT = gql`
+  mutation updateProduct($id: ID!, $name: String, $price: Float){
+    updateProduct(product: {
+      id: $id
+      name: $name
+      price: $price
+    }){
+      id
+      name
+      price
+    }
+  }
+`
+
+function Product({ product }) {
+  const [currEdit, setCurrEdit] = useState(null);
+  const [input, setInput] = useState({})
+  const [updateProduct, {data}] = useMutation(UPDATE_PRODUCT)
+
+  let inEditMode
+  if (currEdit === product.id) { inEditMode = true }
+  if (currEdit == !product.id) { inEditMode = false }
+
+  const toggleEdit = (curr) => {
+    if (curr === currEdit) {
+      setCurrEdit(null)
+      return
+    }
+    setCurrEdit(curr)
+  }
+  const onInput = (e) => {
+    return setInput({
+      ...input,
+      [e.target.name]: e.target.value
+    })
+  }
+  function onSubmit(e){
+    e.preventDefault();
+    updateProduct({
+      variables: {
+        id: product.id ,
+        name: input.name,
+        price: parseFloat(input.price)
+      }
+    }).then(() => {
+      setInput({})
+      toggleEdit()
+    }).catch(err => console.log(err))
+  }
+
+  return (
+    <form onSubmit={onSubmit}>
+      {currEdit === product.id ? <input placeholder={product.name} name='name' onChange={onInput} /> : <h1>{product.name}</h1>}
+      {inEditMode ? <input placeholder={product.price} name='price' onChange={onInput} /> : <p>{product.price}</p>}
+      {inEditMode ?
+        <div>
+          <button onClick={() => toggleEdit(product.id)}><GiCancel/> cancel</button>
+          <button onClick={() => console.log('submit')}>submit</button>
+        </div> :
+        <button onClick={() => toggleEdit(product.id)}>Edit <GrEdit /></button>
+        
+      }
+      <hr />
+    </form>
+  );
+}
 
 function ProductList() {
   const { loading, error, data } = useQuery(PRODUCT_QUERY)
@@ -25,13 +95,7 @@ function ProductList() {
     <div className='ProductList'>
       {/* GREAT EXPORT MODULE CANADATE */}
       {data.products.map(product => {
-        return (
-          <div key={product.id}>
-            <h1>{product.name}</h1>
-            <p>{product.price}</p>
-            <hr />
-          </div>
-        );
+        return <Product product={product} key={product.id} />
       })}
     </div>
   )

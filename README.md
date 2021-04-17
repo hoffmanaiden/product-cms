@@ -6,7 +6,7 @@ Skipped a couple videos for efficiency
 # Todo
 <ul>
   <li>Create frontend UPDATE & DELETE functions</li>
-  <li>Extract ProductList into new module ✔</li>
+  <li>update name makes existing price null, figure out why and fix</li>
 </ul>
 
 ### ignored files of note
