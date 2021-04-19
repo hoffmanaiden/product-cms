@@ -1,9 +1,6 @@
-# Last did
-Improved Update frontend
-
 # Todo
 <ul>
-  <li>Create frontend DELETE functions</li>
+  <li>Make UI update when a CRUD operation happens</li>
   <li>Make Return submit the change</li>
 </ul>
 

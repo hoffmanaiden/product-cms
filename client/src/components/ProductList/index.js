@@ -9,6 +9,7 @@ import {
 } from '@apollo/client';
 import { GrEdit } from 'react-icons/gr';
 import { GiCancel } from 'react-icons/gi';
+import {BiTrash} from 'react-icons/bi';
 
 const PRODUCT_QUERY = gql` 
 query allProducts{
@@ -32,12 +33,23 @@ const UPDATE_PRODUCT = gql`
     }
   }
 `
+const DELETE_PRODUCT = gql`
+  mutation deleteProduct($id: ID!){
+    deleteProduct(product:{
+      id: $id
+    }){
+      id
+      name
+      price
+    }
+  }
+`
 
 function Product({ product }) {
-  const [state, setState] = useState(product)
   const [currEdit, setCurrEdit] = useState(null);
   const [input, setInput] = useState({})
   const [updateProduct, { data }] = useMutation(UPDATE_PRODUCT)
+  const [deleteProduct] = useMutation(DELETE_PRODUCT)
 
   let inEditMode
   if (currEdit === product.id) { inEditMode = true }
@@ -52,16 +64,13 @@ function Product({ product }) {
   }
   const onInput = (e) => {
     return setInput({
-      ...state,
+      ...product,
       ...input, // ---------------------- drawing from empty state
       [e.target.name]: e.target.value
     })
   }
   function onSubmit(e) {
     e.preventDefault();
-    console.log(`id: ${product.id}`)
-    console.log(`name: ${input.name}`)
-    console.log(`price: ${input.price}`)
     updateProduct({
       variables: {
         id: product.id,
@@ -74,15 +83,27 @@ function Product({ product }) {
     }).catch(err => console.log(err))
   }
 
+  function onDelete(e){
+    e.preventDefault();
+    deleteProduct({
+      variables: {
+        id: product.id
+      }
+    }).then(() => {
+      toggleEdit();
+    }).catch(err => console.log(err))
+  }
+
   return (
-    <form action={onSubmit} onSubmit={onSubmit}>
+    <form onSubmit={onSubmit}>
       {inEditMode ? <h4>{product.name}</h4> : null}
-      {inEditMode ? <input placeholder={product.name} name='name' onChange={onInput} onSubmit={onSubmit}/> : <h1>{product.name}</h1>}
-      {inEditMode ? <input placeholder={product.price} name='price' onChange={onInput} onSubmit={onSubmit} /> : <p>{product.price}</p>}
+      {inEditMode ? <input placeholder={product.name} name='name' onChange={onInput}/> : <h1>{product.name}</h1>}
+      {inEditMode ? <input placeholder={product.price} name='price' onChange={onInput}/> : <p>{product.price}</p>}
       {inEditMode ?
         <div>
           <button onClick={() => toggleEdit(product.id)}><GiCancel /> cancel</button>
-          <button type="submit" tabindex="-1">submit</button>
+          <button type="submit">submit</button>
+          <button onClick={onDelete}><BiTrash/> delete</button>
         </div> :
         <button onClick={() => toggleEdit(product.id)}>Edit <GrEdit /></button>
 
@@ -94,6 +115,9 @@ function Product({ product }) {
 
 function ProductList() {
   const { loading, error, data } = useQuery(PRODUCT_QUERY)
+  const [products, setProducts] = useState([])
+  
+  // setProducts(() => data.products)
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error...¯\_(ツ)_/¯</p>
