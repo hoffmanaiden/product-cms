@@ -1,3 +1,8 @@
+# Headline
+In the process of,<br>
+extracting functions to pass values as props<br>
+trying to get UI components to update on data change
+
 # Todo
 <ul>
   <li>Make UI update when a CRUD operation happens</li>
