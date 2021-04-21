@@ -9,7 +9,6 @@ import {
 } from '@apollo/client';
 
 
-// apollo-client schema?
 const ADD_PRODUCT = gql`
   mutation addProduct($name: String!, $price: Float!) {
     addProduct(product: {

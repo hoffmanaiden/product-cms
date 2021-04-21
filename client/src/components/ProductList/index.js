@@ -48,7 +48,7 @@ const DELETE_PRODUCT = gql`
 function Product({ product }) {
   const [currEdit, setCurrEdit] = useState(null);
   const [input, setInput] = useState({})
-  const [updateProduct, { data }] = useMutation(UPDATE_PRODUCT)
+  const [updateProduct] = useMutation(UPDATE_PRODUCT)
   const [deleteProduct] = useMutation(DELETE_PRODUCT)
 
   let inEditMode
@@ -106,7 +106,6 @@ function Product({ product }) {
           <button onClick={onDelete}><BiTrash/> delete</button>
         </div> :
         <button onClick={() => toggleEdit(product.id)}>Edit <GrEdit /></button>
-
       }
       <hr />
     </form>
@@ -114,16 +113,14 @@ function Product({ product }) {
 }
 
 function ProductList() {
-  const { loading, error, data } = useQuery(PRODUCT_QUERY)
-  const [products, setProducts] = useState([])
-  
-  // setProducts(() => data.products)
+  const { loading, error, data } = useQuery(PRODUCT_QUERY, {
+    pollInterval: 500,
+  })
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error...¯\_(ツ)_/¯</p>
   return (
     <div className='ProductList'>
-      {/* GREAT EXPORT MODULE CANADATE */}
       {data.products.map(product => {
         return <Product product={product} key={product.id} />
       })}
